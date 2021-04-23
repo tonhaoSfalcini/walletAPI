@@ -10,12 +10,14 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.wallet.entities.User;
 import com.wallet.respositories.UserRepository;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SpringBootTest
+@ActiveProfiles("test")
 public class UserRepositoryTest {
 
 	private static final String EMAIL = "email@domain.com";
@@ -45,7 +47,7 @@ public class UserRepositoryTest {
 	
 	@Test
 	public void findByEmail() {
-		User user = repository.findByEmail(EMAIL).orElse(null);
+		User user = repository.findByEmailEquals(EMAIL).orElse(null);
 		
 		assertNotNull(user.getEmail());
 		assertEquals(user.getEmail(), EMAIL);
