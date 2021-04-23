@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wallet.dto.UserDTO;
 import com.wallet.entities.User;
 import com.wallet.response.Response;
 import com.wallet.services.UserService;
@@ -26,17 +27,22 @@ public class UserController {
 	public ResponseEntity<Response<UserDTO>> create(@Validated @RequestBody UserDTO dto, BindingResult result){
 		Response<UserDTO> response = new Response<UserDTO>();
 		
-		userService.save(convertDtoToEntity(dto));
+		User user = userService.save(convertDtoToEntity(dto));
+		response.setData(convertEntityToDto(user));
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
 	private User convertDtoToEntity(UserDTO dto) {
-		User user = new User(null, dto.getNome(), dto.getSenha(), dto.getEmail());
+		User user = new User(null, dto.getName(), dto.getSenha(), dto.getEmail());
 		
 		return user;
 	}
 	private UserDTO convertEntityToDto(User user) {
-		UserDTO dto = new UserDTO(user.getNome(), user.getSenha(), user.getEmail());
+		UserDTO dto = new UserDTO();
+		dto.setName(user.getNome());
+		dto.setSenha(user.getSenha());
+		dto.setEmail(user.getEmail());
 		
 		return dto;
 	}
